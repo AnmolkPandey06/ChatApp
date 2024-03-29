@@ -5,11 +5,11 @@ import { connectToDB } from "./db/connnectMongoose.js";
 import messageroutes from './routes/messageroues.js'
 import userroutes from './routes/userroutes.js'
 import cookieParser from "cookie-parser";
-
+import cors from 'cors';
 const app=express();
 dotenv.config();
 app.use(express.json());
-
+app.use(cors());
 app.use(cookieParser());
 
 

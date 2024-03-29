@@ -1,8 +1,30 @@
 import React from 'react'
-
+import { Link } from 'react-router-dom';
 import GenderCheckbox from './GenderCheckbox';
-
+import { useState } from 'react';
+import  {useSignup } from '../../hooks/useSignup';
 const SignUppage = () => {
+
+	const {loading,signup}=useSignup();
+    const [inputs, setInputs] = useState({
+		username: "",
+		email: "",
+		password: "",
+		gender: "",
+	});
+
+    const handleCheckBoxChange=async(gender)=>{
+		setInputs({...inputs,gender})
+		
+	}
+
+	const handleSubmit=async(e)=>{
+		e.preventDefault();
+		console.log(inputs);
+		await signup(inputs);
+	}
+
+
 	return (
 		<div className='flex flex-col items-center justify-center min-w-96 mx-auto'>
 			<div className='w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0'>
@@ -10,19 +32,21 @@ const SignUppage = () => {
 					Sign Up <span className='text-blue-500'> RapidChatter</span>
 				</h1>
 
-				<form>
+				<form onSubmit={handleSubmit}>
 					<div>
 						<label className='label p-2'>
 							<span className='text-base label-text'>Username</span>
 						</label>
-						<input type='text' placeholder='John Doe' className='w-full input input-bordered  h-10' />
+						<input type='text' placeholder='John Doe' className='w-full input input-bordered  h-10' 
+						onChange={(e)=>setInputs({...inputs,username:e.target.value})}/>
 					</div>
 
 					<div>
 						<label className='label p-2 '>
 							<span className='text-base label-text'>Email</span>
 						</label>
-						<input type='email' placeholder='johndoe@gmail.com' className='w-full input input-bordered h-10' />
+						<input type='email' placeholder='johndoe@gmail.com' className='w-full input input-bordered h-10'
+						onChange={(e)=>setInputs({...inputs,email:e.target.value})}/> 
 					</div>
 
 					<div>
@@ -33,19 +57,22 @@ const SignUppage = () => {
 							type='password'
 							placeholder='Enter Password'
 							className='w-full input input-bordered h-10'
-						/>
+							onChange={(e)=>setInputs({...inputs,password:e.target.value})}/>
 					</div>
 
-					<GenderCheckbox />
+					<GenderCheckbox onCheckboxChange={handleCheckBoxChange} selectedGender={inputs.gender} />
 
-					<a className='text-sm 
-					text-gray-900
-					hover:underline hover:text-blue-600 mt-2 inline-block' href='#'>
-						Already have an account?
-					</a>
+					<Link to="/login" className='text-sm hover:underline hover:text-blue-400 MT-2 inline-block'>
+         Have Account ? Login then 
+        </Link>
 
 					<div>
-						<button className='btn btn-block btn-sm mt-2 border border-slate-700'>Sign Up</button>
+						<button className='btn btn-block btn-sm mt-2 border border-slate-700'
+						disabled={loading}>
+						
+						{loading?<span className="loading loading-spinner"></span>:"Sign Up"}
+						
+						</button>
 					</div>
 				</form>
 			</div>
