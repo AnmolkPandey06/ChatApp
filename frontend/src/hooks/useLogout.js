@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import toast from 'react-hot-toast';
 import { useAuthContext } from '../context/authcontext.jsx';
 import { useConversation } from '../zustand-store/useConversation.js';
+import { useSearchResults } from '../zustand-store/useSearchResult.js';
 export const useLogout = () => {
   
   const [loading,setLoading]=useState((false));
   const {authUser,setAuthUser}=useAuthContext();
+  const {SearchResult,setSearchResult}=useSearchResults();
 
   const {selectedConversation,setSelectedConversation} =useConversation();
   
@@ -24,6 +26,7 @@ export const useLogout = () => {
           localStorage.removeItem("chat-user");
           setAuthUser(null);
           setSelectedConversation(null);
+          setSearchResult([]);
           
        } catch (error) {
         toast.error(error.message)

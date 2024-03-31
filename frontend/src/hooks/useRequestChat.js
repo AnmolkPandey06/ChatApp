@@ -2,38 +2,39 @@ import React, { useState } from 'react'
 import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useAuthContext } from '../context/authcontext';
-import { useConversationStarter } from '../zustand-store/useConversationStarter';
-const useGetConversations = () => {
+const useRequestChat = () => {
     const [loading,setLoading]=useState(false);
     const {authUser,setAuthUser}=useAuthContext();
-    const{pendingconversations,setPendingConversations,conversations,setConversations}=useConversationStarter();
     // const [conversations,setConversations]=useState([]);
     // const [pendingconversations,setPendingConversations]=useState([]);
-    
-    const getConversation=async()=>{
+
+    const RequestChat=async(id)=>{
         setLoading(true);
         try {
-            console.log("inside dfndslfdnsfln")
-            const res= await fetch(`/api/user/`);
+            console.log("asdkjdksafjbdskjfbdskjfbdskjfbdskjfbdskjfbdsk");
+            const res= await fetch(`/api/user/pendingreq/${id}`);
             const data=await res.json();
+            console.log(data);
+            console.log("asdkjdksafjbdskjfbdskjfbdskjfbdskjfbdskjfbdsk");
             if(data.error){
+                console.log('error here 2')
                 throw new Error(data.error);
             }
-            setConversations(data.friends);
-            setPendingConversations(data.pending);
+            toast.success('Request Sent to User for chat')
+            // setConversations(data.friends);
+            // setPendingConversations(data.pending);
         } catch (error) {
             toast.error(error.message)
+            console.log(error);
         }
         finally{
             setLoading(false);
         }
        }
+       
+    
 
-    useEffect(()=>{
-       getConversation();
-    },[]);
-
-    return {loading,getConversation}
+    return {loading,RequestChat}
 }
 
-export default useGetConversations
+export default useRequestChat

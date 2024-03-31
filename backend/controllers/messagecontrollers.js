@@ -1,5 +1,7 @@
 import { Conversation } from "../models/conversationModel.js";
 import { Message } from "../models/messagemodel.js";
+import { getRecieverSocketId } from "../socket.io/socket.js";
+import { io } from "../socket.io/socket.js";
 
 export const sendMessage=async (req,res)=>{
    
@@ -40,6 +42,14 @@ export const sendMessage=async (req,res)=>{
 
 
         // socket io funbctionnnnn
+        const recieversocketId=getRecieverSocketId(recieverId);
+
+        if(recieverId){
+
+            //io .to socket used to send events to specific client
+            io.to(recieversocketId).emit("newMessage",newMessage);
+        }
+        
 
         // await Promise.all(conversation.save());
          
@@ -61,8 +71,13 @@ export const getMessage=async(req,res)=>{
             participants:{
                 $all:[senderId,userttoChat]
             } 
-        }).populate("messages");
+        }).populate("messages").populate("participants");
 
+        
+
+
+
+        console.log(conversation);
         if(!conversation) return res.status(200).json([]);
 
         res.status(200).json(conversation.messages);

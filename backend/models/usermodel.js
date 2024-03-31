@@ -2,6 +2,19 @@ import mongoose
  from "mongoose";
 
   const userSchema=new mongoose.Schema({
+   
+     friends:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
+        default:[]   
+     }],
+
+     pendingfriends:[{
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"User",
+      default:[]   
+   }],
+   
      username:{
         type:String,
         required:true

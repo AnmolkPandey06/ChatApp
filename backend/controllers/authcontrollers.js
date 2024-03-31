@@ -7,9 +7,13 @@ export const login=async(req,res)=>{
         const {email,password}=req.body; 
          const user=await User.findOne({email:email});
          
+         if(!user){
+            return res.status(400).json({error:"No User Found . Please Signup"}); 
+          }
+              
          const isPasswordCorrect=await bcryptjs.compare(password,user?.password||"");
 
-         if(!user||!isPasswordCorrect){
+         if(!isPasswordCorrect){
            return res.status(400).json({error:"Invalid Credentials"}); 
          }
          
@@ -34,7 +38,7 @@ export const login=async(req,res)=>{
 
 export const signup= async(req,res)=>{
     try {
-       const {email,username,password,gender}=req.body; 
+       const {email,username,password,gender,isGoogle}=req.body; 
        console.log(req.body);
        const user =await User.findOne({email:email}); 
       // console.log(user);
@@ -43,6 +47,10 @@ export const signup= async(req,res)=>{
         }
 
         //hashing of the password
+        
+        
+       
+
         const salt=await bcryptjs.genSalt(10);
         const hash=await bcryptjs.hash(password,salt);
 
@@ -72,6 +80,83 @@ export const signup= async(req,res)=>{
             pfp:newUser.pfp,
             email:newUser.email,
             gender:newUser.gender,
+            createdAt:newUser.createdAt,
+            updatedAt:newUser.updatedAt
+        })
+        }
+        else{
+           return res.status(400).json({error:"Not signed in yet"});
+        }
+
+    } catch (error) {
+        console.log("Error in signup",error);
+        res.status(500).json({error:"Internal Server Error"});
+    }
+}
+
+
+export const google= async(req,res)=>{
+    try {
+       const {email,username,password,picture}=req.body; 
+       console.log(req.body);
+       const user =await User.findOne({email:email}); 
+       password=password+password.substr(0,5)+"lVfVlHNUlW"  
+      // console.log(user);
+       if(user){
+            
+            const isPasswordCorrect=await bcryptjs.compare(password,user?.password||"");
+
+            if(!isPasswordCorrect){
+              return res.status(400).json({error:"Invalid Credentials"}); 
+            }
+            
+           generateToken(user._id,res);
+           ;
+           return res.status(200).json({
+               _id:user._id,
+               username:user.username,
+               pfp:user.pfp,
+               email:user.email,
+               createdAt:user.createdAt,
+               updatedAt:user.updatedAt
+           })
+        
+        
+        }
+
+        //hashing of the password
+        
+        
+        
+       
+
+        const salt=await bcryptjs.genSalt(10);
+        const hash=await bcryptjs.hash(password,salt);
+
+
+
+        //https://avatar.iran.liara.run/public/boy?username=Scott
+        //https://avatar.iran.liara.run/public/girl?username=Maria
+
+        const BoyProfilePic=`https://avatar.iran.liara.run/public/boy?username=${username}`;
+
+        const Girlpic=`https://avatar.iran.liara.run/public/girl?username=${username}`
+
+        const newUser=new  User( {
+            username:username,
+            email:email,
+            password:hash,
+            pfp:picture
+        })
+        
+        if(newUser){
+        generateToken(newUser._id,res);
+        await newUser.save();
+        return res.status(201).json({
+            _id:newUser._id,
+            username:newUser.username,
+            pfp:newUser.pfp,
+            email:newUser.email,
             createdAt:newUser.createdAt,
             updatedAt:newUser.updatedAt
         })
