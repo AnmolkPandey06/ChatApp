@@ -1,11 +1,11 @@
 import express from "express";
 import dotenv from 'dotenv';
-import authroutes from './routes/authroutes.js'
-import { connectToDB } from "./db/connnectMongoose.js";
-import messageroutes from './routes/messageroues.js'
-import userroutes from './routes/userroutes.js'
+import authroutes from './backend/routes/authroutes.js'
+import { connectToDB } from "./backend/db/connnectMongoose.js";
+import messageroutes from './backend/routes/messageroues.js'
+import userroutes from './backend/routes/userroutes.js'
 import cookieParser from "cookie-parser";
-import { app ,server} from "./socket.io/socket.js";
+import { app ,server} from "./backend/socket.io/socket.js";
 import cors from 'cors';
 import path from "path";
 // const app=express();
