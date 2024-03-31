@@ -4,9 +4,7 @@ import { useLogin } from '../../hooks/useLogin';
 import { useState } from 'react';
 import Heading from '../../components/Heading';
 import google from '../../assets/google.png'
-import { GoogleLogin } from '@react-oauth/google';
 
-import { useGoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from "jwt-decode";
 import toast from 'react-hot-toast';
 import {use} from 'react'
@@ -28,8 +26,7 @@ const Loginpage = () => {
 	  await login(inputs);
 	}
   
-  // const {GoogleLogin}=useGoogle();
-  // use()
+ 
   
   const googler=async(response)=>{
     console.log('in googler')
@@ -56,10 +53,6 @@ const Loginpage = () => {
      
   // }, [googleRes,GoogleLogin])
   
-
-  const handleGooglelogin = useGoogleLogin({
-    onSuccess: tokenResponse => console.log(tokenResponse),
-  });
 
 
 
