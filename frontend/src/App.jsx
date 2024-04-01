@@ -14,7 +14,7 @@ function App() {
   if(authUser) console.log(authUser);
   return (
     <>
-      <div className='w-full h-screen flex items-center justify-center'>
+      <div className='w-full h-screen overflow-y-auto overflow-x-hidden flex items-center justify-center'>
              
              <Toaster/>
              <Routes>
