@@ -13,7 +13,7 @@ const Sidebar = () => {
    const isSelected=selectedConversation?"hidden md:block":""
 
   return (
-      <div className={`border-slate-500  md:w-1/3 p-6 flex flex-col mb-0 ${isSelected}`}>
+      <div className={`border-slate-500  md:w-1/3 p-2 md:p-6 flex flex-col mb-0 ${isSelected}`}>
 
       {!selectedConversation && <div className='my-3'><NoChatSelected/></div>}
        
